@@ -1,0 +1,17 @@
+# ==========================================================================
+# Set Unix Timezone variable based on the CLOCK00 parmlib member
+# This can be used in /etc/profile for setting the timezone for users upon
+# logon.
+# ==========================================================================
+# Populate td (time direction) with W (western) or E (eastern)
+ td=`cat "//'SYS1.PARMLIB(CLOCK00)'" | grep -i timezone | cut -d " " -f2 | cut -d . -f1` 
+# Populate ta (time amount hours)
+ ta=`cat "//'SYS1.PARMLIB(CLOCK00)'" | grep -i timezone | cut -d " " -f2 | cut -d . -f2` 
+# Apply logic to set the time offset
+ if [ $td = 'W' ] ;                                                                      
+ then                                                                                    
+    TZ="GMT+$ta"                                                                         
+ else                                                                                    
+    TZ="GMT-$ta"                                                                         
+ fi                                                                                      
+ export TZ   
